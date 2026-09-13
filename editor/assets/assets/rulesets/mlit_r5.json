@@ -1,0 +1,54 @@
+{
+  "_comment": [
+    "国土交通省 デジタル写真管理情報基準（令和5年3月）＋ 小黒板情報電子化要領 に基づく C1 ルールセット。",
+    "出典は docs/02_compliance_research.md。一次資料で確認できたものだけを入れている。",
+    "",
+    "確認済み（2026-08 時点）:",
+    "  PHOTO05.DTD    … 基準 付属資料1 から取得済み。lib/data/photo_xml.dart に反映。",
+    "  適用要領基準    … 令和5年3月版は 土木202303-01。",
+    "  信憑性確認      … 小黒板情報電子化の通知により、CRYPTREC 暗号リスト掲載の技術を",
+    "                    使うこと、および納品時に J-COMSIA のチェックシステムで確認して",
+    "                    結果を提出することが求められる。",
+    "                    本アプリの署名は SHA-256 + ECDSA P-256（いずれも CRYPTREC 掲載）だが、",
+    "                    J-COMSIA のチェックツールが読む形式は公開されていない。",
+    "                    検定を受けないと合わせられないため、C1 では P3 を止めている。",
+    "  写真編集の扱い  … 小黒板情報の電子的記入は、基準 6章の「写真編集」には該当しない。",
+    "                    つまり黒板の焼き込み自体は禁止された編集ではない。",
+    "",
+    "未確定の項目（意図的に空にしている）:",
+    "  requiredFields  … 個々の必須記載項目は写真管理基準・運用方針(案)側の規定で、",
+    "                    発注者ごとに版が異なる（調査項目 R2/R3）。未取得のため空。",
+    "                    空のまま使うと必須チェックが働かない。取得後に埋めること。",
+    "  imageSpec.minQuality/maxQuality … 基準は「標準（BASIC、約1/16圧縮）」相当の記述のみで、",
+    "                    JPEG 品質の数値は定めていない。数値を勝手に決めると",
+    "                    「基準に沿っている」と誤解されるため設定しない。",
+    "  allowedTemplateIds … 準拠テンプレートは R2/R3 の項目一覧が前提。未作成のため空。"
+  ],
+  "id": "mlit-r5",
+  "name": "国土交通省 基準準拠（令和5年3月）",
+  "version": "1.0.0",
+  "issuer": "国土交通省",
+  "effectiveFrom": "2023-03-01T00:00:00.000",
+  "requiredFields": [],
+  "forbiddenActions": [
+    "editPhoto",
+    "changeTemplateStructure",
+    "changePreset"
+  ],
+  "imageSpec": {
+    "minPixels": 1080000,
+    "maxPixels": 3000000
+  },
+  "fileNamingTemplate": "P{seq:7}",
+  "allowedTemplateIds": [],
+  "templateLockPolicy": "layoutOnly",
+  "defaultPreset": "P3",
+  "presetChangeAllowed": false,
+  "defaultDateMode": "D1",
+  "dateModesAllowed": [
+    "D1",
+    "D2"
+  ],
+  "verificationScheme": "jcomsia_v1_1",
+  "outputFormat": "jpeg"
+}

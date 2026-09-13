@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="/kokuban-site/editor/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="工事写真アプリ「サッと黒板」の黒板テンプレートを、パソコンのブラウザで作るページです。">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="サッと黒板 PCエディタ">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>サッと黒板 PCエディタ</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    #loading {
+      position: fixed; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 8px;
+      font-family: system-ui, sans-serif; color: #333; background: #fafafa;
+    }
+    #loading small { color: #666; }
+  </style>
+</head>
+<body>
+  <!--
+    フォントと描画エンジンで 30MB 前後あり、初回は表示まで数十秒かかる。
+    何も出ないと壊れていると思われるので、最初の描画まで案内を出す。
+  -->
+  <div id="loading">
+    <div>サッと黒板 PCエディタを読み込んでいます…</div>
+    <small>初回は数十秒かかることがあります</small>
+  </div>
+  <script>
+    window.addEventListener('flutter-first-frame', function () {
+      var el = document.getElementById('loading');
+      if (el) el.remove();
+    });
+  </script>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
