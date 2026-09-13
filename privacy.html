@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>プライバシーポリシー</title>
+<style>
+:root { color-scheme: light dark; --fg:#1a1a1a; --bg:#fff; --muted:#666;
+        --line:#ddd; --quote:#f6f6f6; --todo:#ffdede; --todofg:#a00; }
+@media (prefers-color-scheme: dark) {
+  :root { --fg:#e8e8e8; --bg:#171717; --muted:#a0a0a0;
+          --line:#3a3a3a; --quote:#222; --todo:#5a1f1f; --todofg:#ffb4b4; }
+}
+* { box-sizing: border-box; }
+body { margin:0; padding:2rem 1.25rem 5rem; color:var(--fg); background:var(--bg);
+       font-family: system-ui, "Hiragino Sans", "Noto Sans JP", sans-serif;
+       line-height:1.9; font-size:16px; }
+main { max-width: 44rem; margin: 0 auto; }
+h1 { font-size:1.6rem; line-height:1.5; border-bottom:2px solid var(--line);
+     padding-bottom:.6rem; margin-top:0; }
+h2 { font-size:1.2rem; margin-top:2.4rem; border-bottom:1px solid var(--line);
+     padding-bottom:.3rem; }
+h3 { font-size:1.05rem; margin-top:1.8rem; }
+p, li { overflow-wrap: anywhere; }
+code { background:var(--quote); padding:.1em .35em; border-radius:3px;
+       font-size:.9em; }
+blockquote { margin:1.2rem 0; padding:.8rem 1rem; background:var(--quote);
+             border-left:3px solid var(--line); color:var(--muted); }
+hr { border:0; border-top:1px solid var(--line); margin:2.4rem 0; }
+/* 表は幅の狭い端末でも壊れないよう、自分の中で横に送る */
+.tablewrap { overflow-x:auto; margin:1.2rem 0; }
+table { border-collapse:collapse; width:100%; font-size:.95rem; }
+th, td { border:1px solid var(--line); padding:.5rem .7rem; text-align:left;
+         vertical-align:top; }
+th { background:var(--quote); }
+a { color:inherit; }
+.todo { background:var(--todo); color:var(--todofg); font-weight:bold;
+        padding:.05em .3em; border-radius:3px; }
+.banner { background:var(--todo); color:var(--todofg); border-radius:6px;
+          padding:1rem 1.2rem; margin-bottom:2rem; font-weight:bold; }
+footer { margin-top:4rem; padding-top:1.2rem; border-top:1px solid var(--line);
+         color:var(--muted); font-size:.9rem; }
+</style>
+</head>
+<body>
+<main>
+
+<h1>プライバシーポリシー</h1>
+<h2>1. 基本方針</h2>
+<p>本アプリ「サッと黒板」（以下「本アプリ」）は、<strong>全機能が端末内で完結する設計</strong>です。撮影した写真、工事情報、黒板テンプレート、その他利用者が入力したデータを、当方のサーバへ送信することはありません。当方はこれらのデータを取得せず、閲覧できません。</p>
+<h2>2. 本アプリが端末内に保存する情報</h2>
+<p>次の情報を、端末内のアプリ専用領域にのみ保存します。</p>
+<div class="tablewrap"><table><thead><tr>
+<th>情報</th>
+<th>内容</th>
+<th>目的</th>
+</tr></thead><tbody>
+<tr>
+<td>撮影写真</td>
+<td>カメラで撮影した画像（黒板を写し込んだもの）</td>
+<td>本アプリの中核機能</td>
+</tr>
+<tr>
+<td>工事情報・撮影項目</td>
+<td>利用者が入力または Excel / CSV から取り込んだ内容</td>
+<td>黒板への表示、写真の分類</td>
+</tr>
+<tr>
+<td>黒板テンプレート</td>
+<td>利用者が作成したレイアウト定義</td>
+<td>黒板の描画</td>
+</tr>
+<tr>
+<td>撮影日時</td>
+<td>実時刻および表示日時</td>
+<td>写真の記録・整理</td>
+</tr>
+<tr>
+<td>位置情報</td>
+<td>緯度・経度（<strong>設定で「入」にした場合のみ</strong>）</td>
+<td>写真の Exif への記録</td>
+</tr>
+<tr>
+<td>操作ログ</td>
+<td>撮影・削除・書き出し・設定変更の記録</td>
+<td>利用者自身が経緯を確認するため</td>
+</tr>
+<tr>
+<td>不具合の記録</td>
+<td>アプリが異常終了した際のエラー内容</td>
+<td>不具合の原因調査（下記 5 参照）</td>
+</tr>
+<tr>
+<td>PIN のハッシュ値</td>
+<td>アプリロックを設定した場合</td>
+<td>端末紛失時の保護。<strong>PIN そのものは保存しません</strong></td>
+</tr>
+<tr>
+<td>購入の記録</td>
+<td>買い切りを購入済みかどうか、購入した日時、通算の撮影枚数</td>
+<td>撮影の制限の解除（<strong>購入者の氏名・決済情報は含みません</strong>）</td>
+</tr>
+</tbody></table></div>
+<p>これらは、利用者が本アプリをアンインストールした時点で端末から削除されます。</p>
+<h2>3. 位置情報の取り扱い</h2>
+<ol>
+<li>位置情報の取得は<strong>既定で無効</strong>です。工事ごとの設定で明示的に有効にした場合にのみ取得します。</li>
+<li>取得した位置情報は、撮影した写真の Exif 情報に記録されます。<strong>当方へは送信されません。</strong></li>
+<li>写真を書き出して第三者へ渡す場合、Exif に記録された位置情報も併せて渡ることになります。必要に応じて、設定で位置情報の記録を無効にしてください。</li>
+</ol>
+<h2>4. ネットワーク通信について</h2>
+<p>本アプリは、次の1点を除き、<strong>一切のネットワーク通信を行いません</strong>。</p>
+<h3>アプリ内購入（買い切りの購入と復元）</h3>
+<ul>
+<li>利用者が購入または「購入を復元」を実行したときにのみ、Google Play のサーバと通信します。<strong>起動のたびには通信しません。</strong></li>
+<li>通信するのは Google Play の課金の仕組みであり、当方のサーバではありません。<strong>当方は購入者の氏名・メールアドレス・決済情報を受け取りません。</strong></li>
+<li>送信される情報の取り扱いは Google のプライバシーポリシーに従います。</li>
+</ul>
+<p><a href="https://policies.google.com/privacy">https://policies.google.com/privacy</a></p>
+<ul>
+<li><strong>購入した後は、通信できない場所でも撮影を続けられます。</strong> 解除された状態は端末内に記録され、起動のたびに Google Play へ問い合わせることはありません。</li>
+<li>撮影した写真、工事情報、位置情報が送信されることは、購入の際も含めて一切ありません。</li>
+</ul>
+<p>本アプリは、アクセス解析、広告、クラッシュレポート送信などの目的で外部サービスに通信することはありません。</p>
+<h2>5. 不具合の記録について</h2>
+<ol>
+<li>本アプリが異常終了した場合、その原因（エラー内容と発生箇所）を<strong>端末内のファイル</strong>に記録します。</li>
+<li><strong>この記録が自動的に送信されることはありません。</strong></li>
+<li>記録には、状況によって工事名やファイルの保存先が含まれることがあります。このため、利用者が「アプリの設定 → 不具合の記録」から<strong>内容を確認したうえで、自らの操作で送信する</strong>形にしています。</li>
+<li>記録は、利用者がいつでも削除できます。</li>
+</ol>
+<h2>6. 権限の利用目的</h2>
+<div class="tablewrap"><table><thead><tr>
+<th>権限</th>
+<th>目的</th>
+<th>拒否した場合</th>
+</tr></thead><tbody>
+<tr>
+<td>カメラ</td>
+<td>工事写真の撮影</td>
+<td>撮影できません。本アプリの中核機能のため必須です</td>
+</tr>
+<tr>
+<td>位置情報（正確／おおよそ）</td>
+<td>撮影位置を写真の Exif に記録</td>
+<td>位置情報の記録のみ行われません。撮影は可能です</td>
+</tr>
+<tr>
+<td>インターネット</td>
+<td>上記 4 のアプリ内購入と復元のみ</td>
+<td>購入と復元ができません。無料枠の範囲での撮影は可能です</td>
+</tr>
+<tr>
+<td>生体認証</td>
+<td>アプリロックの解除（PIN の代替）</td>
+<td>PIN でのみ解除します</td>
+</tr>
+</tbody></table></div>
+<h2>7. 第三者提供</h2>
+<p>当方は、利用者のデータを取得しないため、第三者へ提供することはありません。</p>
+<h2>8. 児童のプライバシー</h2>
+<p>本アプリは工事現場での業務利用を想定しており、児童の利用を意図していません。</p>
+<h2>9. データの安全管理</h2>
+<ol>
+<li>撮影データは端末のアプリ専用領域に保存され、他のアプリからは参照できません。</li>
+<li>アプリロック（PIN／生体認証）により、端末紛失時の閲覧を制限できます。</li>
+<li><strong>端末内のデータのバックアップは利用者の責任で行ってください。</strong> 当方はデータを保持していないため、端末の故障・紛失時に復元することはできません。</li>
+</ol>
+<h2>10. 本ポリシーの変更</h2>
+<p>本ポリシーを変更する場合は、本アプリ内または当方の定めるウェブサイトに掲示します。</p>
+<h2>11. お問い合わせ</h2>
+<div class="tablewrap"><table><thead><tr>
+<th>項目</th>
+<th>内容</th>
+</tr></thead><tbody>
+<tr>
+<td>事業者</td>
+<td>甲田和也</td>
+</tr>
+<tr>
+<td>メールアドレス</td>
+<td>ksp.deve@gmail.com</td>
+</tr>
+<tr>
+<td>所在地</td>
+<td>広島県広島市西区観音本町１丁目１７−５ 303</td>
+</tr>
+</tbody></table></div>
+<hr>
+<p>制定日: 2026年9月13日</p>
+<footer>このページは <code>docs/09_プライバシーポリシー.md</code> から
+<code>tools/build_legal_pages.py</code> で生成しています。
+<strong>HTML を直接編集しないでください。</strong>元の Markdown を直して作り直します。</footer>
+</main>
+</body>
+</html>
