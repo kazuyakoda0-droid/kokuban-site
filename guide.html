@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<title>サッと黒板 使い方ガイド</title>
+<style>
+  :root {
+    --ground: #F3F6F4;
+    --surface: #FFFFFF;
+    --ink: #17231D;
+    --muted: #50625A;
+    --rule: #D3DDD7;
+    --accent: #1B6B3F;
+    --accent-soft: #E1EEE6;
+    --board: #14532D;
+    --board-edge: #0C3A1F;
+    --board-ink: #F4F7F2;
+    --board-line: rgba(244, 247, 242, .55);
+    --chalk: #F2D675;
+    --chip-bg: #FFFFFF;
+    --chip-border: #AFC0B6;
+    --chip-shadow: #C9D5CE;
+    --warn-bg: #FBF1D9;
+    --warn-ink: #5E4200;
+    --sheet-head: #E8EDEA;
+    --sheet-grid: #C9D3CD;
+    --font-body: "BIZ UDPGothic", "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif;
+    --font-chalk: "Klee One", "BIZ UDPGothic", "Yu Gothic", serif;
+    --font-mono: ui-monospace, "Cascadia Mono", "Consolas", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0F1713;
+      --surface: #16201B;
+      --ink: #E4ECE7;
+      --muted: #9DB0A5;
+      --rule: #2A3831;
+      --accent: #7CCB9A;
+      --accent-soft: #1D3328;
+      --board: #1A5B35;
+      --board-edge: #0A2615;
+      --chip-bg: #1D2923;
+      --chip-border: #445A4E;
+      --chip-shadow: #0A100D;
+      --warn-bg: #33280F;
+      --warn-ink: #F0D595;
+      --sheet-head: #1F2B25;
+      --sheet-grid: #33443B;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0F1713;
+    --surface: #16201B;
+    --ink: #E4ECE7;
+    --muted: #9DB0A5;
+    --rule: #2A3831;
+    --accent: #7CCB9A;
+    --accent-soft: #1D3328;
+    --board: #1A5B35;
+    --board-edge: #0A2615;
+    --chip-bg: #1D2923;
+    --chip-border: #445A4E;
+    --chip-shadow: #0A100D;
+    --warn-bg: #33280F;
+    --warn-ink: #F0D595;
+    --sheet-head: #1F2B25;
+    --sheet-grid: #33443B;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.85;
+    padding-inline: 20px;
+    -webkit-text-size-adjust: 100%;
+  }
+  a { color: var(--accent); text-underline-offset: 3px; }
+  a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+  .wrap {
+    max-width: 1120px;
+    margin-inline: auto;
+    padding-block: 40px 96px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  @media (min-width: 1000px) {
+    .wrap { grid-template-columns: 230px minmax(0, 1fr); gap: 56px; }
+    .toc { position: sticky; top: 24px; align-self: start; max-height: calc(100vh - 48px); overflow-y: auto; }
+  }
+
+  /* ---------- 目次 ---------- */
+  .toc { font-size: 14px; line-height: 1.6; }
+  .toc h2 { font-size: 12px; letter-spacing: .12em; color: var(--muted); margin: 0 0 8px; font-weight: 700; }
+  .toc ol { list-style: none; margin: 0 0 20px; padding: 0; display: grid; gap: 2px; }
+  .toc a { display: block; padding: 5px 10px; border-radius: 6px; color: var(--ink); text-decoration: none; }
+  .toc a:hover { background: var(--accent-soft); }
+  .toc .part { display: flex; align-items: center; gap: 8px; font-weight: 700; margin: 0 0 6px; font-size: 14px; }
+
+  /* ---------- 冒頭 ---------- */
+  header.hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    align-items: center;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--rule);
+  }
+  @media (min-width: 760px) { header.hero { grid-template-columns: minmax(0, 1fr) minmax(0, 360px); } }
+  .hero .kicker { font-size: 13px; letter-spacing: .14em; color: var(--muted); font-weight: 700; margin: 0 0 8px; }
+  .hero h1 { font-size: clamp(30px, 5vw, 44px); line-height: 1.3; margin: 0 0 16px; text-wrap: balance; letter-spacing: .02em; }
+  .hero p { margin: 0; max-width: 34em; color: var(--ink); }
+  .hero .sub { color: var(--muted); font-size: 14px; margin-top: 12px; }
+
+  /* 黒板の見本 */
+  .board {
+    background: var(--board);
+    border: 6px solid var(--board-edge);
+    border-radius: 6px;
+    padding: 10px;
+    color: var(--board-ink);
+    font-family: var(--font-chalk);
+    box-shadow: 0 10px 24px -14px rgba(0,0,0,.45);
+    max-width: 100%;
+  }
+  .board table { width: 100%; border-collapse: collapse; }
+  .board th, .board td { border: 1.5px solid var(--board-line); padding: 6px 10px; text-align: left; font-weight: 600; font-size: 17px; line-height: 1.4; }
+  .board th { width: 32%; white-space: nowrap; font-weight: 400; }
+  .board td.chalk { color: var(--chalk); }
+  .board-caption { font-size: 12px; color: var(--muted); margin-top: 8px; text-align: right; }
+
+  /* ---------- 全体の流れ ---------- */
+  .flow { list-style: none; margin: 24px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; counter-reset: flow; }
+  .flow li {
+    counter-increment: flow;
+    flex: 1 1 150px;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .flow li::before { content: counter(flow); display: block; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; font-size: 13px; }
+  .flow b { display: block; font-size: 15px; }
+  .device { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .08em; padding: 1px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); vertical-align: 2px; }
+
+  /* ---------- 本文 ---------- */
+  main { min-width: 0; }
+  .part-head { margin: 64px 0 8px; padding-top: 8px; }
+  .part-head .device { font-size: 12px; }
+  .part-head h2 { font-size: clamp(24px, 3.4vw, 30px); margin: 8px 0 8px; line-height: 1.35; text-wrap: balance; }
+  .part-head p { margin: 0; color: var(--muted); max-width: 40em; }
+
+  section.topic { margin-top: 44px; max-width: 46em; scroll-margin-top: 16px; }
+  section.topic > h3 { font-size: 21px; margin: 0 0 12px; line-height: 1.45; text-wrap: balance; }
+  section.topic h4 { font-size: 16px; margin: 28px 0 8px; }
+  p { margin: 0 0 14px; }
+
+  .ui {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: .92em;
+    font-weight: 700;
+    line-height: 1.4;
+    padding: 1px 9px 2px;
+    margin: 0 1px;
+    border: 1px solid var(--chip-border);
+    border-bottom-width: 2px;
+    border-radius: 6px;
+    background: var(--chip-bg);
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  code, .mono { font-family: var(--font-mono); font-size: .9em; background: var(--accent-soft); padding: 1px 6px; border-radius: 4px; }
+
+  ol.steps { list-style: none; counter-reset: step; margin: 16px 0 18px; padding: 0; display: grid; gap: 12px; }
+  ol.steps > li { counter-increment: step; position: relative; padding-left: 44px; }
+  ol.steps > li::before {
+    content: counter(step);
+    position: absolute; left: 0; top: 1px;
+    width: 30px; height: 30px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--board); color: var(--board-ink);
+    font-family: var(--font-chalk); font-weight: 600; font-size: 16px;
+    font-variant-numeric: tabular-nums;
+  }
+  ol.steps > li p { margin: 4px 0 0; color: var(--muted); font-size: 15px; }
+
+  ul.plain { margin: 8px 0 16px; padding-left: 1.3em; }
+  ul.plain li { margin: 4px 0; }
+
+  .note {
+    background: var(--warn-bg);
+    color: var(--warn-ink);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 15px;
+    line-height: 1.75;
+  }
+  .note strong:first-child { display: block; margin-bottom: 2px; }
+  .tip {
+    background: var(--accent-soft);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 15px;
+    line-height: 1.75;
+  }
+  .tip strong:first-child { color: var(--accent); margin-right: 6px; }
+
+  .scroll { overflow-x: auto; margin: 14px 0 18px; }
+  table.ref { border-collapse: collapse; width: 100%; font-size: 15px; line-height: 1.6; background: var(--surface); }
+  table.ref th, table.ref td { border-bottom: 1px solid var(--rule); padding: 9px 12px; text-align: left; vertical-align: top; }
+  table.ref thead th { font-size: 12px; letter-spacing: .08em; color: var(--muted); background: var(--surface); border-bottom: 2px solid var(--rule); }
+  table.ref td:first-child { white-space: nowrap; }
+
+  /* Excel 風の表 */
+  table.sheet { border-collapse: collapse; font-size: 14px; background: var(--surface); font-variant-numeric: tabular-nums; }
+  table.sheet th, table.sheet td { border: 1px solid var(--sheet-grid); padding: 4px 12px; min-width: 44px; line-height: 1.5; }
+  table.sheet thead th, table.sheet tbody th { background: var(--sheet-head); color: var(--muted); font-weight: 400; text-align: center; font-size: 12px; }
+  table.sheet td.head { font-weight: 700; }
+  table.sheet td.blank { color: var(--muted); }
+  .sheet-note { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+  .pair { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; margin: 16px 0; }
+  @media (min-width: 700px) { .pair { grid-template-columns: auto minmax(0, 1fr); } }
+
+  .cascade { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0 16px; font-size: 15px; }
+  .cascade .pick { border: 1px solid var(--chip-border); background: var(--surface); border-radius: 8px; padding: 6px 12px; line-height: 1.5; }
+  .cascade .pick small { display: block; color: var(--muted); font-size: 11px; }
+  .cascade .arrow { color: var(--muted); }
+
+  footer { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--rule); color: var(--muted); font-size: 13px; max-width: 46em; }
+</style>
+
+<div class="wrap">
+  <nav class="toc" aria-label="目次">
+    <h2>目次</h2>
+    <ol>
+      <li><a href="#flow">全体の流れ</a></li>
+    </ol>
+    <p class="part"><span class="device">PC</span>PC エディタ</p>
+    <ol>
+      <li><a href="#pc-open">開く・保存のしくみ</a></li>
+      <li><a href="#pc-rows">行を並べて黒板を作る</a></li>
+      <li><a href="#pc-pen">罫線を手で引く</a></li>
+      <li><a href="#pc-text">文字を直す・自動で入れる</a></li>
+      <li><a href="#pc-table">表を編む</a></li>
+      <li><a href="#pc-excel">Excel の表から選ばせる</a></li>
+      <li><a href="#pc-tools">道具箱の一覧</a></li>
+      <li><a href="#pc-send">スマホへ送る</a></li>
+    </ol>
+    <p class="part"><span class="device">スマホ</span>サッと黒板アプリ</p>
+    <ol>
+      <li><a href="#app-project">工事を作る</a></li>
+      <li><a href="#app-template">黒板を取り込んで選ぶ</a></li>
+      <li><a href="#app-items">撮影項目を入れる</a></li>
+      <li><a href="#app-shoot">撮影する</a></li>
+      <li><a href="#app-date">日時の記録</a></li>
+      <li><a href="#app-export">写真の整理と書き出し</a></li>
+      <li><a href="#app-backup">バックアップ</a></li>
+      <li><a href="#app-settings">設定と購入</a></li>
+    </ol>
+    <ol>
+      <li><a href="#caution">ご利用前の注意</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div>
+        <p class="kicker">使い方ガイド</p>
+        <h1>サッと黒板で、黒板を作って撮るまで</h1>
+        <p>黒板の見た目は「PC エディタ」かアプリの中で作り、撮影はスマホアプリで行います。どちらも同じ描画処理なので、画面で作った黒板がそのまま写真に写ります。</p>
+        <p class="sub">電波の届かない現場でも、撮影・黒板の編集・書き出しはすべてスマホの中で完結します。</p>
+      </div>
+      <figure style="margin:0">
+        <div class="board" role="img" aria-label="黒板の見本。業務名 水質調査業務、地点名 丸1、時間 10時30分、年月日 2026年9月14日、施工業者 サンプル建設">
+          <table>
+            <tr><th>業務名</th><td>水質調査業務</td></tr>
+            <tr><th>地点名</th><td class="chalk">①</td></tr>
+            <tr><th>時間</th><td>10:30</td></tr>
+            <tr><th>年月日</th><td>2026年9月14日</td></tr>
+            <tr><th>施工業者</th><td>（株）サンプル建設</td></tr>
+          </table>
+        </div>
+        <figcaption class="board-caption">「行を並べて作る」で作った黒板の見本</figcaption>
+      </figure>
+    </header>
+
+    <section class="topic" id="flow" style="max-width:none">
+      <h3>全体の流れ</h3>
+      <p>パソコンで黒板を作る場合の手順です。アプリの中だけで作る場合は、2〜4 を飛ばせます。</p>
+      <ol class="flow">
+        <li><span class="device">PC</span><b>黒板を作る</b>PC エディタで作って「保存」</li>
+        <li><span class="device">PC</span><b>ファイルに保存</b>.json ファイルができる</li>
+        <li><b>スマホへ送る</b>メール・Google ドライブ・USB など</li>
+        <li><span class="device">スマホ</span><b>取り込む</b>「テンプレート」から JSON を取り込む</li>
+        <li><span class="device">スマホ</span><b>工事で選ぶ</b>工事の設定で黒板を選ぶ</li>
+        <li><span class="device">スマホ</span><b>撮影・書き出し</b>黒板つきで撮り、まとめて出す</li>
+      </ol>
+    </section>
+
+    <!-- ================= PC エディタ ================= -->
+    <div class="part-head">
+      <span class="device">PC</span>
+      <h2>PC エディタで黒板を作る</h2>
+      <p>インストール不要・無料。パソコンのブラウザで開きます。スマホアプリの「テンプレート」→<span class="ui">新規作成</span>/<span class="ui">編集</span>でも同じエディタが開きます（クリックはタップ、ダブルクリックはダブルタップに読み替えてください）。</p>
+    </div>
+
+    <section class="topic" id="pc-open">
+      <h3>開く・保存のしくみ</h3>
+      <p>公開版は <a href="editor/">PC版エディタ</a>（このサイト内）です。開くと、テンプレートの一覧が並びます。</p>
+      <div class="scroll">
+        <table class="ref">
+          <thead><tr><th>ボタン</th><th>できること</th></tr></thead>
+          <tbody>
+            <tr><td><span class="ui">新規作成</span></td><td>白紙の黒板からエディタを開く</td></tr>
+            <tr><td><span class="ui">編集</span></td><td>そのテンプレートをエディタで開く</td></tr>
+            <tr><td><span class="ui">ファイルに保存</span></td><td>テンプレートを .json ファイルとしてパソコンに保存する</td></tr>
+            <tr><td><span class="ui">ファイルを読み込む</span></td><td>画面右上。保存しておいた .json を一覧に戻す</td></tr>
+            <tr><td><span class="ui">削除</span></td><td>一覧から消す（確認があります）</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">
+        <strong>作った黒板は、そのパソコンのそのブラウザの中にだけ保存されます</strong>
+        どこにも送信されませんが、別のパソコンやブラウザには引き継がれず、ブラウザの閲覧データを消すと一緒に消えます。大事な黒板は<span class="ui">ファイルに保存</span>で手元にも残してください。プライベートブラウズでは保存できません。
+      </div>
+    </section>
+
+    <section class="topic" id="pc-rows">
+      <h3>行を並べて黒板を作る（いちばん簡単な方法）</h3>
+      <p>「業務名・地点名・時間・年月日・施工業者」のように、項目を上から並べるだけで黒板いっぱいの表になります。罫線や位置を自分で合わせる必要はありません。</p>
+      <ol class="steps">
+        <li>エディタ下の道具箱の左端にある<span class="ui">行で作る</span>を押す
+          <p>白紙の黒板なら、真ん中の<span class="ui">行を並べて作る</span>からも開けます。</p></li>
+        <li>各行の「項目名」を入力する
+          <p>足りなければ<span class="ui">行を足す</span>、順番は<span class="ui">上へ</span>で入れ替え、要らない行はごみ箱で消します。</p></li>
+        <li>「入る値」を確かめる
+          <p>項目名から自動で推測されます。「年月日」なら撮影した日付、「時間」なら撮影した時刻が、撮るたびに自動で入ります。違っていれば右のプルダウンで選び直し、固定の文字にしたいときは「手で入れる文字」を選びます。</p></li>
+        <li><span class="ui">黒板に置く</span>を押す
+          <p>黒板にすでに要素があるときは、置き換えるか上に追加するかを選べます。</p></li>
+        <li>右上の<span class="ui">保存</span>を押す</li>
+      </ol>
+      <div class="tip"><strong>ヒント</strong>「左に項目名の列を付ける」を切ると、項目名を出さずに値だけを1行ずつ大きく表示します。</div>
+    </section>
+
+    <section class="topic" id="pc-pen">
+      <h3>罫線を手で引く</h3>
+      <p>フリーハンドでなぞった線は、まっすぐな罫線に整えられます。</p>
+      <ol class="steps">
+        <li>道具箱の<span class="ui">線を引く</span>を押す</li>
+        <li>黒板の上をドラッグして線をなぞる
+          <p>水平・垂直に近い線はぴったり水平・垂直に揃い、近くの枠や線に吸い付きます。</p></li>
+        <li>引き終わったら、もう一度<span class="ui">線を引く</span>を押して終える</li>
+      </ol>
+      <p>引いた線はクリックで選べます。細い線でもつかみやすいよう、選べる幅を広くしてあります。</p>
+    </section>
+
+    <section class="topic" id="pc-text">
+      <h3>文字を直す・自動で入れる</h3>
+      <ul class="plain">
+        <li><strong>選ぶ</strong>：黒板上の文字や表をクリック。選ぶと画面下に文字の入力欄が出て、そのまま書き換えられます。</li>
+        <li><strong>中身を編集する</strong>：ダブルクリック、または道具箱の<span class="ui">編集</span>。</li>
+        <li><strong>大きさ</strong>：入力欄の横の「文字を大きく／小さく」で調整します。</li>
+        <li><strong>自動で入れる</strong>：入力欄の横の「自動で入れる値」（稲妻のボタン）から、撮影日・時刻・工事名などを選ぶと、撮影のたびに値が入ります。項目名の文字を選んでいるときは、合いそうな値を提案します。</li>
+        <li><strong>黒板いっぱいに広げる</strong>：選んだ要素を<span class="ui">全体に広げる</span>で、黒板の枠の内側いっぱいにします。</li>
+      </ul>
+      <p>画面上部には<span class="ui">元に戻す</span>/<span class="ui">やり直す</span>、位置を揃える「スナップ」、はみ出しなどを知らせる「レイアウトの注意」、写真に重ねて見る「実写で確認」があります。</p>
+    </section>
+
+    <section class="topic" id="pc-table">
+      <h3>表を編む</h3>
+      <p>表を選ぶと、道具箱に<span class="ui">罫線</span>が現れます。押すと「表を編む」画面が開き、Excel と同じ感覚で操作できます。</p>
+      <ul class="plain">
+        <li>セルをドラッグして範囲を選び、「罫線」で線を引く・消す</li>
+        <li>「行や列を挿入・削除」で表の形を変える</li>
+        <li>複数のセルを選んで結合する（結合前に確認があります）</li>
+        <li>項目名のセルを入力すると、右隣のセルに合う値を自動で入れます</li>
+        <li><kbd class="ui">Ctrl</kbd>+<kbd class="ui">Z</kbd> で元に戻す、<kbd class="ui">Ctrl</kbd>+<kbd class="ui">Y</kbd> でやり直す。終わったら<span class="ui">完了</span></li>
+      </ul>
+    </section>
+
+    <section class="topic" id="pc-excel">
+      <h3>Excel の表から選ばせる（業務名 → 地点名）</h3>
+      <p>業務名と地点名を Excel にまとめておくと、撮影のときにプルダウンで選べます。業務名を選ぶと、地点名はその業務の地点だけに絞られます。100 業務あっても、1 つのファイルで足ります。</p>
+
+      <h4>Excel の書き方</h4>
+      <div class="pair">
+        <div class="scroll" style="margin:0">
+          <table class="sheet" aria-label="Excel の書き方の例">
+            <thead><tr><th></th><th>A</th><th>B</th></tr></thead>
+            <tbody>
+              <tr><th>1</th><td class="head">業務名</td><td class="head">地点名</td></tr>
+              <tr><th>2</th><td>水質調査業務</td><td>①</td></tr>
+              <tr><th>3</th><td class="blank"></td><td>②</td></tr>
+              <tr><th>4</th><td class="blank"></td><td>③</td></tr>
+              <tr><th>5</th><td class="blank"></td><td>④</td></tr>
+              <tr><th>6</th><td class="blank"></td><td>⑤</td></tr>
+              <tr><th>7</th><td>地質調査業務</td><td>B-1</td></tr>
+              <tr><th>8</th><td class="blank"></td><td>B-2</td></tr>
+            </tbody>
+          </table>
+          <p class="sheet-note">.xlsx または .csv</p>
+        </div>
+        <ul class="plain" style="margin:0">
+          <li><strong>A 列</strong>に業務名、<strong>B 列</strong>に地点名。3 段にしたいときは C 列を足します（例：業務 → 地区 → 地点）。</li>
+          <li>同じ業務名が続く行は、<strong>空欄のままで構いません</strong>。上の行の業務名で埋めて読みます（セル結合も同じ扱い）。</li>
+          <li>1 行目は見出しでも、いきなり中身でも構いません。取り込むときに切り替えられます。</li>
+          <li>シートが複数あるときは、取り込むときにシートを選びます。</li>
+        </ul>
+      </div>
+
+      <h4>エディタでの設定</h4>
+      <ol class="steps">
+        <li>道具箱を右端まで送り、<span class="ui">入力欄・Excel</span>を押す</li>
+        <li><span class="ui">表を取り込む（Excel / CSV）</span>を押し、ファイルを選ぶ</li>
+        <li>確認画面で「1行目は見出し」が合っているか見る
+          <p>先頭 8 行と「7 行・2 列（空欄は上の行の値で埋めています）」のような件数が出ます。「列ごとに「選ぶ項目」を作る」は入れたままにします。</p></li>
+        <li><span class="ui">取り込む</span>を押す
+          <p>「業務名　表のA列から選ぶ」「地点名　表のB列から選ぶ」の入力欄ができます。見出しが無いときは「A列」「B列」という名前になります。</p></li>
+        <li><span class="ui">決定</span>を押し、<span class="ui">行で作る</span>で項目名を「業務名」「地点名」にする
+          <p>入る値が「撮影時に選ぶ：業務名」「撮影時に選ぶ：地点名」になります。見本として Excel の 1 行目の値が黒板に出ます。</p></li>
+        <li><span class="ui">黒板に置く</span> → <span class="ui">保存</span></li>
+      </ol>
+
+      <h4>撮影するときの見え方</h4>
+      <div class="cascade" aria-label="選ぶ順番の例">
+        <span class="pick"><small>業務名（2 件から）</small>水質調査業務</span>
+        <span class="arrow" aria-hidden="true">→</span>
+        <span class="pick"><small>地点名（5 件に絞られる）</small>① ② ③ ④ ⑤</span>
+      </div>
+      <ul class="plain">
+        <li>絞り込みは、入力欄の<strong>上にあるものから順</strong>に効きます。並び順は<span class="ui">入力欄・Excel</span>の上矢印で変えられます。</li>
+        <li>件数が多いときは、欄に文字を打つと候補が絞れます。</li>
+        <li>業務名を選び直すと、合わなくなった地点名は自動で外れます。</li>
+      </ul>
+      <div class="tip"><strong>ヒント</strong>表を後から差し替えるときは<span class="ui">取り込み直す</span>、やめるときは<span class="ui">表を外す</span>。どの列から選ぶかは、入力欄を押して「表から」の「選ぶ列」で変えられます。取り込んだ表の中身はテンプレートに一緒に保存されるので、スマホに Excel を送る必要はありません。</div>
+    </section>
+
+    <section class="topic" id="pc-tools">
+      <h3>道具箱の一覧</h3>
+      <p>エディタ下の道具箱は横にスクロールします。要素を選んでいないと押せないボタンは薄く表示されます。</p>
+      <div class="scroll">
+        <table class="ref">
+          <thead><tr><th>まとまり</th><th>ボタン</th></tr></thead>
+          <tbody>
+            <tr><td>簡単に作る</td><td><span class="ui">行で作る</span> <span class="ui">線を引く</span></td></tr>
+            <tr><td>置く</td><td><span class="ui">文字</span> <span class="ui">差し込み</span> <span class="ui">表</span> <span class="ui">図形</span> <span class="ui">矢印</span> <span class="ui">線</span> <span class="ui">画像</span> <span class="ui">手書き</span> <span class="ui">コード</span> <span class="ui">計測値</span><br><small style="color:var(--muted)">押してから黒板をクリックした位置に置かれます</small></td></tr>
+            <tr><td>選んだものを操作</td><td><span class="ui">編集</span> <span class="ui">全体に広げる</span> <span class="ui">罫線</span> <span class="ui">数値</span> <span class="ui">施錠</span> <span class="ui">伏せる</span> <span class="ui">一覧</span> <span class="ui">複製</span> <span class="ui">削除</span> <span class="ui">まとめる</span> <span class="ui">ほどく</span></td></tr>
+            <tr><td>重なり</td><td><span class="ui">最前面</span> <span class="ui">前へ</span> <span class="ui">後ろへ</span> <span class="ui">最背面</span></td></tr>
+            <tr><td>黒板全体</td><td><span class="ui">入力欄・Excel</span> <span class="ui">黒板全体</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <ul class="plain">
+        <li><span class="ui">差し込み</span>：撮影日や工事名など、撮るたびに変わる値を置きます。</li>
+        <li><span class="ui">数値</span>：位置と大きさを % で細かく指定します。</li>
+        <li><span class="ui">施錠</span>/<span class="ui">伏せる</span>：誤って動かさないよう固定する／一時的に隠す。戻すときは<span class="ui">一覧</span>から。</li>
+        <li><span class="ui">黒板全体</span>：黒板の縦横比・背景色・枠を変えます。</li>
+      </ul>
+    </section>
+
+    <section class="topic" id="pc-send">
+      <h3>スマホへ送る</h3>
+      <ol class="steps">
+        <li>エディタ右上の<span class="ui">保存</span>で一覧に戻る</li>
+        <li>テンプレートのカードの<span class="ui">ファイルに保存</span>を押し、.json ファイルを保存する</li>
+        <li>そのファイルをメール・Google ドライブ・USB などでスマホへ送る</li>
+        <li>アプリで取り込む（<a href="#app-template">次の章</a>）</li>
+      </ol>
+    </section>
+
+    <!-- ================= スマホアプリ ================= -->
+    <div class="part-head">
+      <span class="device">スマホ</span>
+      <h2>サッと黒板アプリで撮影する</h2>
+      <p>Android 10 以降。写真・黒板・工事の情報は端末の中にだけ保存され、外部へは送信されません。</p>
+    </div>
+
+    <section class="topic" id="app-project">
+      <h3>工事を作る</h3>
+      <ol class="steps">
+        <li>「工事一覧」で<span class="ui">工事を追加</span>を押す</li>
+        <li>「工事名（必須）」を入れる
+          <p>工事番号・発注者・受注者は「工事の詳しい情報（任意）」から、あとで足しても構いません。</p></li>
+        <li><span class="ui">工事を作成して始める</span>を押す</li>
+      </ol>
+      <p>工事のメニューから<span class="ui">工事を複製</span>を選ぶと、黒板・撮影項目・設定を引き継いだ新しい工事を作れます（写真と撮影履歴は引き継ぎません）。</p>
+    </section>
+
+    <section class="topic" id="app-template">
+      <h3>黒板を取り込んで、工事で選ぶ</h3>
+      <h4>PC で作った黒板を取り込む</h4>
+      <ol class="steps">
+        <li>工事一覧の右上にある「テンプレート」を開く</li>
+        <li>「黒板テンプレート」画面の右上「JSON を取り込む」を押し、送った .json ファイルを選ぶ
+          <p>「「◯◯」を取り込みました」と出れば完了です。一覧から<span class="ui">編集</span>・<span class="ui">複製</span>もできます。</p></li>
+      </ol>
+      <h4>工事で使う黒板を選ぶ</h4>
+      <ol class="steps">
+        <li>工事の画面の右上「設定」を開く</li>
+        <li>「黒板」の欄に並ぶ黒板の見本から、使うものを押す
+          <p>見本には、その工事の情報と今日の日付が入った状態で表示されます。</p></li>
+      </ol>
+    </section>
+
+    <section class="topic" id="app-items">
+      <h3>撮影項目を入れる</h3>
+      <p>工種や測点などの撮影項目を用意しておくと、撮影時に一覧から選べ、まだ撮っていない項目の数もわかります。</p>
+      <ul class="plain">
+        <li><strong>Excel でまとめて入れる</strong>：工事の画面の「撮影項目」タブで<span class="ui">Excel／CSV を取り込む</span>。見出しは「写真区分・工種・種別・細別・測点」を読み取ります。記入用の Excel を配ることもできます。</li>
+        <li><strong>取り込み直す</strong>：追加・更新・削除・変更なしの件数を確かめてから反映します。</li>
+        <li><strong>その場で足す</strong>：「この場で項目を追加」から 1 件ずつ。</li>
+      </ul>
+    </section>
+
+    <section class="topic" id="app-shoot">
+      <h3>撮影する</h3>
+      <ol class="steps">
+        <li>工事一覧の<span class="ui">撮影する</span>、または工事の画面から撮影画面を開く</li>
+        <li>撮影項目を選ぶ
+          <p>「工種・測点で探す」で絞れます。決めていなければ<span class="ui">項目なしで撮る</span>（あとから写真一覧で結びつけられます）。</p></li>
+        <li>黒板の入力欄を埋める
+          <p>Excel の表を取り込んだ黒板なら、業務名 → 地点名の順に選びます。</p></li>
+        <li>シャッターを押し、確認画面で<span class="ui">採用</span>/<span class="ui">撮り直す</span>/<span class="ui">破棄</span>を選ぶ
+          <p>続けて撮るときは<span class="ui">次の未撮影</span>で、まだ撮っていない項目へ進めます。</p></li>
+      </ol>
+      <h4>撮影画面の操作</h4>
+      <div class="scroll">
+        <table class="ref">
+          <thead><tr><th>操作</th><th>内容</th></tr></thead>
+          <tbody>
+            <tr><td>黒板を動かす</td><td>黒板をなぞって移動、四隅をつまんで拡大縮小。「黒板の置き方」から<span class="ui">90度回す</span>・<span class="ui">定位置へ寄せる</span>・透け具合</td></tr>
+            <tr><td>黒板をどける</td><td>「黒板を一時的にどける」。端のタブで戻せます。写真には写ります</td></tr>
+            <tr><td>水準器・グリッド</td><td>傾きの確認と構図合わせ</td></tr>
+            <tr><td>ピント・ズーム</td><td>タップでピント合わせ、ピンチでズーム</td></tr>
+            <tr><td>フラッシュ</td><td>点灯の切り替え</td></tr>
+            <tr><td>画面の明るさ</td><td>撮影画面にいる間だけ明るくします（端末の設定より暗くはしません）</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>端末を横に回すと、黒板の向きも追従します。</p>
+    </section>
+
+    <section class="topic" id="app-date">
+      <h3>日時の記録</h3>
+      <p>シャッターを切った瞬間の時刻は、どの設定でも写真に記録され、変更できません。そのうえで、黒板に<strong>表示する</strong>日時を工事の設定の「日時の記録」で選びます。</p>
+      <div class="scroll">
+        <table class="ref">
+          <thead><tr><th>設定</th><th>黒板に出る日時</th></tr></thead>
+          <tbody>
+            <tr><td>実時刻</td><td>シャッターを切った時刻をそのまま出す</td></tr>
+            <tr><td>丸める</td><td>区切りのよい時刻に寄せて出す（何分単位か、四捨五入・切り上げ・切り捨てを選ぶ）</td></tr>
+            <tr><td>日時を指定する</td><td>撮影のたびに指定する</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>黒板の日時と実際の撮影時刻が違う写真は、写真一覧の絞り込み「日時がずれている写真だけ」で探せます。</p>
+    </section>
+
+    <section class="topic" id="app-export">
+      <h3>写真の整理と書き出し</h3>
+      <ul class="plain">
+        <li><strong>絞り込み</strong>：「写真」タブの絞り込みで、撮影した日・撮影種別・撮影項目・日時の記録・「まだ書き出していない写真だけ」を組み合わせます。</li>
+        <li><strong>ZIP で共有</strong>：絞り込んだ写真をまとめて書き出します。</li>
+        <li><strong>写真台帳 PDF</strong>：「写真台帳PDFを作る」。1 回 300 枚までなので、多いときは絞り込んでから作ります。</li>
+        <li><strong>電子納品</strong>：工事の画面右上「電子納品」で点検し、<span class="ui">PHOTO フォルダを書き出す</span>（PHOTO.XML を含む）。ファイル名の規則は工事の設定で決めます。</li>
+        <li><strong>容量を空ける</strong>：「書き出し済みを消す」で、書き出しや納品に含めた写真だけを消せます。</li>
+      </ul>
+    </section>
+
+    <section class="topic" id="app-backup">
+      <h3>バックアップ</h3>
+      <p>写真は端末の中にしかありません。端末の故障や紛失に備えて、工事一覧の右上「バックアップ」から定期的に<span class="ui">バックアップを作る</span>を行い、できた ZIP を別の場所（パソコンやクラウド）へ移してください。</p>
+      <div class="note">
+        <strong>「バックアップから戻す」は、いま端末にある写真をすべて消してから戻します</strong>
+        元に戻せません。戻したあとは、アプリを一度終了して開き直してください。
+      </div>
+    </section>
+
+    <section class="topic" id="app-settings">
+      <h3>設定と購入</h3>
+      <p>工事一覧の右上「アプリの設定」で変更します。</p>
+      <ul class="plain">
+        <li><strong>起動したらすぐ撮影画面を開く</strong>：現場ですぐ撮りたいとき。</li>
+        <li><strong>撮影中の画面の明るさ</strong>：屋外で見やすくします。</li>
+        <li><strong>アプリロック</strong>：4 桁以上の PIN を決めると、次に開くときから PIN を訊きます。</li>
+        <li><strong>購入</strong>：50 枚までは無料で撮影できます。一度購入すると、以後は枚数の制限なく撮影できます。機種変更や入れ直しのあとは、同じ Google アカウントでここから復元します。</li>
+      </ul>
+      <p>無料枠を使い切っても、撮影済みの写真の閲覧・書き出し・写真台帳の作成・黒板の編集はこれまでどおり使えます。</p>
+    </section>
+
+    <section class="topic" id="caution">
+      <h3>ご利用前の注意</h3>
+      <div class="note">
+        <strong>公共工事では納品できない場合があります</strong>
+        本アプリには写真の改ざんを検知する機能がなく、J-COMSIA の「デジタル工事写真の信憑性確認（改ざん検知機能）検定」にも合格していません。信憑性確認を求められる工事（多くの公共工事）では、本アプリで撮影した写真は納品できません。ご利用の前に、発注者・監督職員にご確認ください。
+      </div>
+      <ul class="plain">
+        <li>「日時を指定する」で撮った写真の表示日時は、撮影者が入れた値です。</li>
+        <li>撮影データは端末内にのみ保存されます。定期的なバックアップをお願いします。</li>
+        <li>PC エディタの黒板はブラウザの中にだけ保存されます。大事な黒板はファイルに保存してください。</li>
+      </ul>
+    </section>
+
+    <footer>
+      サッと黒板 使い方ガイド　2026年9月14日版。画面の文言はアプリの更新で変わることがあります。
+    </footer>
+  </main>
+</div>
+
+</body>
+</html>
