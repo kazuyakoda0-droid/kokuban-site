@@ -254,6 +254,7 @@
     <p class="part"><span class="device">PC</span>PC エディタ</p>
     <ol>
       <li><a href="#pc-open">開く・保存のしくみ</a></li>
+      <li><a href="#pc-csv">黒板に入れるデータのCSV</a></li>
       <li><a href="#pc-rows">行を並べて黒板を作る</a></li>
       <li><a href="#pc-pen">罫線を手で引く</a></li>
       <li><a href="#pc-text">文字を直す・自動で入れる</a></li>
@@ -330,6 +331,7 @@
             <tr><td><span class="ui">新規作成</span></td><td>白紙の黒板からエディタを開く</td></tr>
             <tr><td><span class="ui">編集</span></td><td>そのテンプレートをエディタで開く</td></tr>
             <tr><td><span class="ui">ファイルに保存</span></td><td>テンプレートを .json ファイルとしてパソコンに保存する</td></tr>
+            <tr><td><span class="ui">CSVひな形</span></td><td>黒板に置いた差し込み項目を1行目にした、記入用の .csv を保存する</td></tr>
             <tr><td><span class="ui">ファイルを読み込む</span></td><td>画面右上。保存しておいた .json を一覧に戻す</td></tr>
             <tr><td><span class="ui">削除</span></td><td>一覧から消す（確認があります）</td></tr>
           </tbody>
@@ -339,6 +341,19 @@
         <strong>作った黒板は、そのパソコンのそのブラウザの中にだけ保存されます</strong>
         どこにも送信されませんが、別のパソコンやブラウザには引き継がれず、ブラウザの閲覧データを消すと一緒に消えます。大事な黒板は<span class="ui">ファイルに保存</span>で手元にも残してください。プライベートブラウズでは保存できません。
       </div>
+    </section>
+
+    <section class="topic" id="pc-csv">
+      <h3>黒板に入れるデータのCSVを作る</h3>
+      <ol class="steps">
+        <li>黒板に「工事名」「工種」「種別」「細別」「測点」などの差し込み項目を置き、<span class="ui">保存</span>する</li>
+        <li>テンプレート一覧の<span class="ui">CSVひな形</span>を押す。1行目が項目名のCSVがダウンロードされる</li>
+        <li>Excelなどで開き、2行目から1行につき1組の値を入力して、CSVとして保存する</li>
+        <li>テンプレートを<span class="ui">編集</span>し、<span class="ui">入力欄・Excel</span> → <span class="ui">表を取り込む（Excel / CSV）</span>から記入済みCSVを選ぶ</li>
+        <li>「1行目は見出し」と「列ごとに「選ぶ項目」を作る」をオンにして取り込み、<span class="ui">決定</span> → <span class="ui">保存</span>する</li>
+      </ol>
+      <p>撮影時は1行目の項目名が入力欄になり、上から順に値を選べます。CSVの行は組み合わせの候補です。撮影日時・連番はアプリが自動で入れるため、ひな形の列には含まれません。</p>
+      <div class="note"><strong>CSVとJSONは用途が違います。</strong>CSVは入力候補の表です。スマホへ黒板全体を渡すときは、CSVを取り込んでから<span class="ui">ファイルに保存</span>でJSONを書き出し、アプリに取り込んでください。</div>
     </section>
 
     <section class="topic" id="pc-rows">
